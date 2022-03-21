@@ -1,0 +1,91 @@
+AWS
+Cloud / AWS Overview
+How would you describe AWS? What is "the cloud" or "cloud computing" and why is it so popular now?
+- Amazon Web Services is a cloud platform with tools for enterprise companies and developers.
+- The cloud is what lets users access a shared file or app from any device.
+- Cloud computing is the resources that is delievered on demand with pay-as-you-go payments.
+- The reason cloud computing is so popular and businesses usually switch to is because: 
+	- reliable
+	- it saves money (not having to manage your own servers) and you only pay for what you use
+	- no more guessing about how much capacity you will need (buying too much or too little) 
+	- an increase of speed and agility 
+
+Define Infrastructure, Platform, and Software as a Service
+- Iaas: servers, storage and resources managed from a remote data center that customers can use and innovate via an internet connection
+- Paas: cloud-based platform that provides everything needed for building a specific application 
+- Saas: software/application that users will pay a monthly fee to use, hosted in the cloud. 
+
+What's the difference between a Region and an Availability Zone (AZ)?
+- Region: geographical location with collection of availability zones with physical data centers in the region
+	- inside regions are 2 or more availability zones, hosted in seperate data centers
+- AZ: logical data center inside a region, available for any AWS customer
+	- each zone has seperate power, networking and connectivity to reduce multiple zone failure
+
+How are you charged for using AWS services? Does it vary by service?
+- Autoscalability: You ONLY pay for the services you use. 
+	- Your combined usage of services will create a monthly bill. 
+
+Different ways to interact with AWS services?
+- RDS: hosting a database, configures and maintains your database
+- EC2: elastic cloud compute, virtual machine on the cloud
+- Amazon Machine Image (AMI): template that contains software configuration
+- Elastic block storage (EBS): block storage associated with an ec2
+- Security groups: details what traffic is allowed in & out
+
+EC2
+What are the configuration options for EC2?
+- AWS Management Console: simple web based user interface
+- Command line interface
+- Programming with Amazon RDS: developers can access programmatically use SDKs
+
+What are the different EC2 instance sizes/types?
+- EC2 has a wide selection of instance types that are used to optimized to fit varying applications. 
+	- give you the option to choose what resources you need for your app
+- Ie: T4g, T2, M6g, M5, A1, C4: c4.large
+
+Once you create an EC2, how to connect to it?
+- ssh into the ec2 using 'ssh -i [file.pem] ec2-user@[address]'
+
+What are Security Groups? When defining a rule for a security group, what 3 things do you need to specify?
+- Security groups act like a virtual firewall for EC2 instances that control traffic going in/out.
+- things to specify when defining a security group: 
+	- port range
+	- icmp type and code
+	- source or destination: IPv4 address
+
+What's the difference between scalability, elasticity, and resiliency?
+- Scalability: increase the workload size inside exisiting infrastructure without impacting performance
+- Elasticity: ability adding or removing infrastructure resources depending on workload changes
+- Resiliency: ability for a server to recover and continue operations without systems connected to the network going down
+
+Ways of paying for EC2?
+- On-demand
+- Savings plans
+- Reserved instances
+- Spot instances
+
+RDS
+What's an RDS?
+- A Relational Database Service provides a selection of databases built to save, grow and innovate faster. 
+
+Which vendors are supported?
+- Amazon Aurora MySQL
+- Amazon Aurora PostgreSQL
+- PostgreSQL
+- MySQL
+- MariaDB
+- Oracle
+- SQL Server
+
+// example of a bash script
+ssh -i [file.pem] ec2-user@[address]
+#!/bin/bash
+sudo yum update -y
+sudo yum install git
+sudo yum install java-1.8.0-openjdk-devel -y
+
+sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+sudo yum install -y apache-maven
+
+
