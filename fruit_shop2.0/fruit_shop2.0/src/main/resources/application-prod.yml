@@ -1,10 +1,10 @@
 spring:
   datasource:
-    url: ${DB_URL_JAVALIN}
+    url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASS}
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
