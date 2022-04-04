@@ -42,14 +42,17 @@ public class FruitController {
 		if (name != null) {
 			List<Fruit> fruits = new ArrayList<>();
 			fruits.add(fs.getFruitByName(name));
+			LOG.info("Fruit by " + name + " was found. ");
 			return new ResponseEntity<>(fruits, HttpStatus.OK);
 		}
+		LOG.info("All fruits were found. ");
 		return new ResponseEntity<>(fs.getAll(), HttpStatus.OK);
 		
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Fruit> getById(@PathVariable int id) throws FruitNotFoundException{
+		LOG.info("Fruit by id: " + id + " was found. ");
 		return new ResponseEntity<>(fs.getFruitById(id), HttpStatus.OK); 
 	}
 	
@@ -57,17 +60,20 @@ public class FruitController {
 	@PostMapping
 	public ResponseEntity<String> createUser(@RequestBody Fruit fruit){
 		Fruit f = fs.createFruit(fruit);
+		LOG.info("Fruit " + f.getName() + " was created. ");
 		return new ResponseEntity<>("Fruit " + f.getName() + " has been created. ", HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Fruit> updateFruit(@RequestBody Fruit fruit, @PathVariable("id") int id){
+		LOG.info("Fruit " + fruit.getName() + " was updated. ");
 		return new ResponseEntity<>(fs.updateFruit(id, fruit), HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteById(@PathVariable("id") int id) throws FruitNotFoundException{
 		fs.deleteFruit(id);
-		return new ResponseEntity<>("User by Id #:  " + id + "was deleted.", HttpStatus.OK);
+		LOG.info("Fruit by id: " + id + " was deleted. ");
+		return new ResponseEntity<>("User by id:  " + id + " was deleted.", HttpStatus.OK);
 	}
 }

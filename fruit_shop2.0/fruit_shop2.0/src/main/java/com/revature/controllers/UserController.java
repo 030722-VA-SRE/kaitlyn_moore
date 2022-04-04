@@ -42,7 +42,7 @@ public class UserController {
 		@GetMapping
 		public ResponseEntity<List<User>> getAll(){
 			MDC.put("requestId", UUID.randomUUID().toString());
-			LOG.info("users retrieved");
+			LOG.info("all users retrieved.");
 			return new ResponseEntity<>(us.getAll(), HttpStatus.OK);
 			
 		}
@@ -52,9 +52,10 @@ public class UserController {
 
 			// this just checks if the token is null, not if it has the right value
 			if (token == null) {
+				LOG.info("Cannot log in");
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
-
+			LOG.info("user by id: " + id + "retrieved.");
 			return new ResponseEntity<>(us.getUserById(id), HttpStatus.OK);
 
 		}
@@ -62,17 +63,20 @@ public class UserController {
 		@PostMapping
 		public ResponseEntity<String> createUser(@RequestBody User user) {
 			User u = us.createUser(user);
+			LOG.info("new user by id: "+ u.getId() + " created." );
 			return new ResponseEntity<>("User " + u.getUsername() + " has been created.", HttpStatus.CREATED);
 		}
 
 		@PutMapping("/{id}")
 		public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("id") int id) {
+			LOG.info("user by id: " + user.getId() + " has been updated. ");
 			return new ResponseEntity<>(us.updateUser(id, user), HttpStatus.CREATED);
 		}
 
 		@DeleteMapping("/{id}")
 		public ResponseEntity<String> DeleteById(@PathVariable("id") int id) throws UserNotFoundException {
 			us.deleteUser(id);
+			LOG.info("user by id: " + id + " has been deleted.");
 			return new ResponseEntity<>("User was deleted", HttpStatus.OK);
 		}
 		
