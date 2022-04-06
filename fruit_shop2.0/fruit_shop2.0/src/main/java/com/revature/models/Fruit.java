@@ -21,12 +21,13 @@ public class Fruit {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id; 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String name; 
 	@Column
 	private String description; 
 	@Column
 	private double price; 
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -34,6 +35,15 @@ public class Fruit {
 
 	public Fruit() {
 		super();
+	}
+
+	public Fruit(int id, String name, String description, double price, User shopUser) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.price = price;
+		this.shopUser = shopUser;
 	}
 
 	public int getId() {

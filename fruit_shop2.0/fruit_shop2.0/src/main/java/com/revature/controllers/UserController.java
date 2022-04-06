@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,10 +41,17 @@ public class UserController {
 		
 		
 		@GetMapping
-		public ResponseEntity<List<User>> getAll(){
+		public ResponseEntity<List<UserDTO>> getAll(){
 			MDC.put("requestId", UUID.randomUUID().toString());
+			
+			List<User> users = us.getAll();
+			List<UserDTO> protectedUsers = new ArrayList<>();
+			for(User user : users) {
+				protectedUsers.add(new UserDTO(user));
+			}
+			
 			LOG.info("all users retrieved.");
-			return new ResponseEntity<>(us.getAll(), HttpStatus.OK);
+			return new ResponseEntity<>(protectedUsers, HttpStatus.OK);
 			
 		}
 		
@@ -52,7 +60,7 @@ public class UserController {
 
 			// this just checks if the token is null, not if it has the right value
 			if (token == null) {
-				LOG.info("Cannot log in");
+				LOG.info("Cannot log in, must enter a username & password. ");
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 			LOG.info("user by id: " + id + "retrieved.");

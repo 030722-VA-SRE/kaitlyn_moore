@@ -20,10 +20,10 @@ public class UserService {
 	private FruitRepository fr;
 	
 	@Autowired
-	public UserService(UserRepository ur, FruitRepository fr) {
+	public UserService(UserRepository ur) {
 		super();
 		this.ur = ur;
-		this.fr = fr;
+		
 	} 
 	
 	public UserDTO getUserById(int id) throws UserNotFoundException{
@@ -47,8 +47,9 @@ public class UserService {
 	}
 	
 	@Transactional
-	public void deleteUser(int id) throws UserNotFoundException{
+	public boolean deleteUser(int id) throws UserNotFoundException{
 		getUserById(id); 
 		ur.deleteById(id);
+		return true;
 	}
 }

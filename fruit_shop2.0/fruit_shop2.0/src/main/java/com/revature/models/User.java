@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,11 +24,23 @@ public class User {
 	private String username; 
 	@Column(nullable = false)
 	private String password;
+	@Enumerated(EnumType.STRING)
+	private UserRole role; 
 	
+
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	public User(int id, String username, String password, UserRole role) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.role = role;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -45,9 +59,19 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public UserRole getUser() {
+		return role;
+	}
+	public void setUser(UserRole user) {
+		this.role = user;
+	}
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", user=" + role + "]";
+	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, password, username);
+		return Objects.hash(id, username, password, role);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -58,11 +82,9 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return id == other.id && Objects.equals(password, other.password) && Objects.equals(username, other.username);
+		return id == other.id && Objects.equals(password, other.password) && role == other.role
+				&& Objects.equals(username, other.username);
 	}
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + "]";
-	}
+
 
 }

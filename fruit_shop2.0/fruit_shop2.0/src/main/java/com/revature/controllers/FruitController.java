@@ -37,14 +37,22 @@ public class FruitController {
 	} 
 	
 	@GetMapping
-	public ResponseEntity<List<Fruit>> getAll(@RequestParam(name = "name", required = false) String name){
+	public ResponseEntity<List<Fruit>> getAll(@RequestParam(name = "name", required = false) String name) throws FruitNotFoundException{
 		
 		if (name != null) {
 			List<Fruit> fruits = new ArrayList<>();
-			fruits.add(fs.getFruitByName(name));
+			Fruit f = fs.getFruitByName(name);
+			
+			if(f != null) {
+			fruits.add(f); 
 			LOG.info("Fruit by " + name + " was found. ");
 			return new ResponseEntity<>(fruits, HttpStatus.OK);
-		}
+			}
+			
+			LOG.info("Fruit by " + name + " does not exist. ");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		
 		LOG.info("All fruits were found. ");
 		return new ResponseEntity<>(fs.getAll(), HttpStatus.OK);
 		
@@ -52,6 +60,11 @@ public class FruitController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Fruit> getById(@PathVariable int id) throws FruitNotFoundException{
+		
+		if(id < 1) {
+			LOG.error("No fruits found by this id");
+			throw new FruitNotFoundException();
+		}
 		LOG.info("Fruit by id: " + id + " was found. ");
 		return new ResponseEntity<>(fs.getFruitById(id), HttpStatus.OK); 
 	}
@@ -65,7 +78,7 @@ public class FruitController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Fruit> updateFruit(@RequestBody Fruit fruit, @PathVariable("id") int id){
+	public ResponseEntity<Fruit> updateFruit(@RequestBody Fruit fruit, @PathVariable("id") int id) throws FruitNotFoundException{
 		LOG.info("Fruit " + fruit.getName() + " was updated. ");
 		return new ResponseEntity<>(fs.updateFruit(id, fruit), HttpStatus.CREATED);
 	}

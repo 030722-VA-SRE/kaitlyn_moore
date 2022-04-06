@@ -18,9 +18,8 @@ public class FruitService {
 	@Autowired
 	private UserRepository ur;
 	private FruitRepository fr;
-	public FruitService(UserRepository ur, FruitRepository fr) {
+	public FruitService (FruitRepository fr) {
 		super();
-		this.ur = ur;
 		this.fr = fr;
 	}
 	
@@ -33,12 +32,10 @@ public class FruitService {
 		return f; 
 	}
 	
-	public Fruit getFruitByName(String name){
+	public Fruit getFruitByName(String name) throws FruitNotFoundException{
 		Fruit fruit = fr.findFruitByName(name); 
 		return fruit;
 	}
-	
-	
 	
 	@Transactional
 	public Fruit createFruit(Fruit newFruit) {
@@ -46,19 +43,14 @@ public class FruitService {
 	}
 	
 	@Transactional
-	public Fruit updateFruit(int id, Fruit fruit) {
+	public Fruit updateFruit(int id, Fruit fruit) throws FruitNotFoundException{
 		return fr.save(fruit); 
 	}
 	 
 	@Transactional 
-	public void deleteFruit(int id) throws FruitNotFoundException{
+	public boolean deleteFruit(int id) throws FruitNotFoundException{
 		getFruitById(id); 
 		fr.deleteById(id);
+		return true; 
 	}
-	
-	
-	
-	
-	
-	
 }
