@@ -33,8 +33,8 @@ public class AuthController {
 	
 	@PostMapping
 	public ResponseEntity<String> login(@RequestParam(name="username")String username, @RequestParam(name="password")String password) throws AuthException{
-		// MDC.put("requestId", UUID.randomUUID().toString());
-		// LOG.debug("starting login");
+		MDC.put("requestId", UUID.randomUUID().toString());
+		LOG.debug("starting login");
 		String token = as.login(username, password);
 		
 		HttpHeaders hh = new HttpHeaders();

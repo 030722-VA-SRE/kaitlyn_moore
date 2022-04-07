@@ -2,7 +2,9 @@ package com.revature.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.dtos.FruitDTO;
 import com.revature.exceptions.FruitNotFoundException;
 import com.revature.models.Fruit;
 import com.revature.service.FruitService;
@@ -37,36 +40,23 @@ public class FruitController {
 	}  
 	
 	@GetMapping
-	public ResponseEntity<List<Fruit>> getAll(@RequestParam(name = "name", required = false) String name) throws FruitNotFoundException{
-		
-		if (name != null) {
-			List<Fruit> fruits = new ArrayList<>();
-			Fruit f = fs.getFruitByName(name);
-			
-			if(f != null) {
-			fruits.add(f); 
-			LOG.info("Fruit by " + name + " was found. ");
-			return new ResponseEntity<>(fruits, HttpStatus.OK);
-			}
-			
-			LOG.info("Fruit by " + name + " does not exist. ");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-		
+	public ResponseEntity<List<FruitDTO>> getAll(@RequestParam(name = "name", required = false) String name) throws FruitNotFoundException{
+		MDC.put("requestId", UUID.randomUUID().toString());
+		if(name!= null) {
+			List<FruitDTO> fruits = new ArrayList<>();
+			fruits.add(fs.getFruitByName(name));
+			return new ResponseEntity<>(fruits, HttpStatus.OK); 
+		}
 		LOG.info("All fruits were found. ");
 		return new ResponseEntity<>(fs.getAll(), HttpStatus.OK);
 		
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Fruit> getById(@PathVariable int id) throws FruitNotFoundException{
-		
-		if(id < 1) {
-			LOG.error("No fruits found by this id");
-			throw new FruitNotFoundException();
-		}
-		LOG.info("Fruit by id: " + id + " was found. ");
-		return new ResponseEntity<>(fs.getFruitById(id), HttpStatus.OK); 
+	public ResponseEntity<List<FruitDTO>> getById(@PathVariable int id) throws FruitNotFoundException{
+		List<FruitDTO> fruits = new ArrayList<>();
+		fruits.add(fs.getFruitById(id));
+		return new ResponseEntity<>(fruits, HttpStatus.OK); 
 	}
 	
 	

@@ -1,5 +1,6 @@
 package com.revature.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -7,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.dtos.FruitDTO;
 import com.revature.exceptions.FruitNotFoundException;
 import com.revature.models.Fruit;
 import com.revature.repositories.FruitRepository;
@@ -23,18 +25,30 @@ public class FruitService {
 		this.fr = fr; 
 	}
 	
-	public List<Fruit> getAll(){
-		return fr.findAll(); 
+	public List<FruitDTO> getAll(){
+		List<Fruit> fruits = fr.findAll();
+		List<FruitDTO> protectFruits = new ArrayList<>(); 
+		for(Fruit f : fruits) {
+				protectFruits.add(new FruitDTO(f));
+			}
+		return protectFruits; 
 	}
 	
-	public Fruit getFruitById(int id) throws FruitNotFoundException{
-		Fruit f = fr.findById(id).orElseThrow(FruitNotFoundException::new); 
-		return f; 
+	public FruitDTO getFruitById(int id) throws FruitNotFoundException{
+		if(id < 1) {
+			//LOG.error("No fruits exist ");
+			throw new FruitNotFoundException();
+		}
+		//LOG.info("Fruit by id: " + id + " was found. ");
+		Fruit f1 = fr.getById(id);
+		return new FruitDTO(f1);
 	}
 	
-	public Fruit getFruitByName(String name) throws FruitNotFoundException{
-		Fruit fruit = fr.findFruitByName(name); 
-		return fruit;
+	public FruitDTO getFruitByName(String name) throws FruitNotFoundException{
+		// Fruit fruit = fr.findFruitByName(name); 
+		// return fruit;
+		Fruit f1 = fr.findFruitByName(name); 
+		return new FruitDTO(f1); 
 	}
 	
 	@Transactional
