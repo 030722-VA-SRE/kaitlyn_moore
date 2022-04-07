@@ -20,7 +20,7 @@ public class FruitService {
 	private FruitRepository fr;
 	public FruitService (FruitRepository fr) {
 		super();
-		this.fr = fr;
+		this.fr = fr; 
 	}
 	
 	public List<Fruit> getAll(){

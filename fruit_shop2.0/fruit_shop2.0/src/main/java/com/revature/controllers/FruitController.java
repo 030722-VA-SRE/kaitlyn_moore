@@ -34,7 +34,7 @@ public class FruitController {
 	public FruitController(FruitService fs) {
 		super();
 		this.fs = fs; 
-	} 
+	}  
 	
 	@GetMapping
 	public ResponseEntity<List<Fruit>> getAll(@RequestParam(name = "name", required = false) String name) throws FruitNotFoundException{

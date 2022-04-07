@@ -21,53 +21,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dtos.UserDTO;
+import com.revature.exceptions.AuthException;
+import com.revature.exceptions.BadTokenException;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.models.User;
+import com.revature.models.UserRole;
+import com.revature.service.AuthService;
 import com.revature.service.UserService;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
+		
 		private UserService us;
+		private AuthService authServ; 
+		
 		private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 		
 		@Autowired
-		public UserController(UserService us) {
+		public UserController(UserService us, AuthService au) {
 			super();
 			this.us = us;
+			this.authServ = au; 
 		} 
-		
-		
 		@GetMapping
-		public ResponseEntity<List<UserDTO>> getAll(){
+		public ResponseEntity<List<UserDTO>> getAll(@RequestHeader(value = "Authorization", required = false) String token) throws AuthException, BadTokenException{
 			MDC.put("requestId", UUID.randomUUID().toString());
-			
+			if(!authServ.verify(token, UserRole.ADMIN, UserRole.BASIC_USER)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
 			List<User> users = us.getAll();
 			List<UserDTO> protectedUsers = new ArrayList<>();
-			for(User user : users) {
-				protectedUsers.add(new UserDTO(user));
-			}
-			
+			for(User user : users) { 
+				protectedUsers.add(new UserDTO(user)); 
+				}
 			LOG.info("all users retrieved.");
 			return new ResponseEntity<>(protectedUsers, HttpStatus.OK);
-			
-		}
+		} 
 		
 		@GetMapping("/{id}")
-		public ResponseEntity<UserDTO> getById(@PathVariable("id") int id, @RequestHeader("Authorization") String token) throws UserNotFoundException {
-
-			// this just checks if the token is null, not if it has the right value
-			if (token == null) {
-				LOG.info("Cannot log in, must enter a username & password. ");
+		public ResponseEntity<UserDTO> getById(@PathVariable("id") int id, @RequestHeader("Authorization") String token) throws UserNotFoundException, AuthException, BadTokenException {
+			if (!authServ.verify(token)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 			LOG.info("user by id: " + id + "retrieved.");
 			return new ResponseEntity<>(us.getUserById(id), HttpStatus.OK);
-
 		}
-
+		
 		@PostMapping
 		public ResponseEntity<String> createUser(@RequestBody User user) {
 			User u = us.createUser(user);

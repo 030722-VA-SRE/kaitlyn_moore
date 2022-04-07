@@ -34,7 +34,7 @@ public class User {
 	}
 	
 	public User(int id, String username, String password, UserRole role) {
-		super();
+		super(); 
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -49,7 +49,7 @@ public class User {
 	}
 	public String getUsername() {
 		return username;
-	}
+	} 
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -59,7 +59,7 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public UserRole getUser() {
+	public UserRole getRole() { 
 		return role;
 	}
 	public void setUser(UserRole user) {

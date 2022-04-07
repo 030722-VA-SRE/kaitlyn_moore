@@ -17,13 +17,12 @@ import com.revature.repositories.UserRepository;
 public class UserService {
 
 	private UserRepository ur;
-	private FruitRepository fr;
+	
 	
 	@Autowired
 	public UserService(UserRepository ur) {
 		super();
 		this.ur = ur;
-		
 	} 
 	
 	public UserDTO getUserById(int id) throws UserNotFoundException{
@@ -31,7 +30,6 @@ public class UserService {
 		return new UserDTO(user);
 	}
 	
-
 	@Transactional
 	public User createUser(User newUser) {
 		return ur.save(newUser); 
@@ -42,8 +40,8 @@ public class UserService {
 	}
 	
 	@Transactional 
-	public User updateUser(int id, User user) {
-		return ur.save(user);
+	public User updateUser(int id, User user) { 
+		return ur.save(user); 
 	}
 	
 	@Transactional
