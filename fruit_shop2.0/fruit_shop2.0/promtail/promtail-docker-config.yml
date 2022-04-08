@@ -14,7 +14,7 @@ scrape_configs:
       - targets:
           - localhost
         labels:
-          job: logging-demo
+          job: fruit_shop
           __path__: /var/log/application.log
     pipeline_stages:
       - json:

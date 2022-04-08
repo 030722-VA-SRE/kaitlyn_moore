@@ -1,7 +1,6 @@
 package com.revature.controllers;
 
 import java.util.UUID;
-
 import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-
 import com.revature.exceptions.AuthException;
 import com.revature.service.AuthService;
 
@@ -34,7 +31,7 @@ public class AuthController {
 	@PostMapping
 	public ResponseEntity<String> login(@RequestParam(name="username")String username, @RequestParam(name="password")String password) throws AuthException{
 		MDC.put("requestId", UUID.randomUUID().toString());
-		LOG.debug("starting login");
+		LOG.debug("Starting login");
 		String token = as.login(username, password);
 		
 		HttpHeaders hh = new HttpHeaders();

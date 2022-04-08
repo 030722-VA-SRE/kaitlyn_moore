@@ -1,16 +1,12 @@
 package com.revature.service;
 
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.models.User;
-import com.revature.repositories.FruitRepository;
 import com.revature.repositories.UserRepository;
 
 @Service

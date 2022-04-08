@@ -3,7 +3,6 @@ package com.revature.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.AuthException;
 import com.revature.exceptions.BadTokenException;
@@ -46,6 +44,7 @@ public class UserController {
 			this.us = us;
 			this.authServ = au; 
 		} 
+		
 		@GetMapping
 		public ResponseEntity<List<UserDTO>> getAll(@RequestHeader(value = "Authorization", required = false) String token) throws AuthException, BadTokenException{
 			MDC.put("requestId", UUID.randomUUID().toString());
@@ -63,6 +62,7 @@ public class UserController {
 		
 		@GetMapping("/{id}")
 		public ResponseEntity<UserDTO> getById(@PathVariable("id") int id, @RequestHeader("Authorization") String token) throws UserNotFoundException, AuthException, BadTokenException {
+			MDC.put("requestId", UUID.randomUUID().toString());
 			if (!authServ.verify(token)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
@@ -73,6 +73,7 @@ public class UserController {
 		@PostMapping
 		public ResponseEntity<String> createUser(@RequestBody User user) {
 			User u = us.createUser(user);
+			MDC.put("User has been created: ", user.getId());
 			LOG.info("new user by id: "+ u.getId() + " created." );
 			return new ResponseEntity<>("User " + u.getUsername() + " has been created.", HttpStatus.CREATED);
 		}
@@ -80,6 +81,7 @@ public class UserController {
 		@PutMapping("/{id}")
 		public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("id") int id) {
 			LOG.info("user by id: " + user.getId() + " has been updated. ");
+			MDC.put("User updated by id: ", user.getId());
 			return new ResponseEntity<>(us.updateUser(id, user), HttpStatus.CREATED);
 		}
 
@@ -87,6 +89,7 @@ public class UserController {
 		public ResponseEntity<String> DeleteById(@PathVariable("id") int id) throws UserNotFoundException {
 			us.deleteUser(id);
 			LOG.info("user by id: " + id + " has been deleted.");
+			MDC.put("User has been deleted: ", id);
 			return new ResponseEntity<>("User was deleted", HttpStatus.OK);
 		}
 		
